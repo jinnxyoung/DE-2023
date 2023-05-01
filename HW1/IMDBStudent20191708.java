@@ -10,21 +10,24 @@ import org.apache.hadoop.mapreduce.lib.input.*;
 import org.apache.hadoop.mapreduce.lib.output.*;
 import org.apache.hadoop.util.GenericOptionsParser;
 
-public class WordCount {
-	public static class WordCountMapper extends Mapper<Object, Text, Text, IntWritable> {
-		private final static IntWritable one = new IntWritable(1);
+public class MatrixAdd {
+	public static class MatrixAddMapper extends Mapper<Object, Text, Text, IntWritable> {
+		private final static IntWritable i_value = new IntWritable(1);
 		private Text word = new Text();
 
 		public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
 			StringTokenizer itr = new StringTokenizer(value.toString());
-			while (itr.hasMoreTokens()) {
-				word.set(itr.nextToken());
-				context.write(word, one);
-			}
+			int row_id = Integer.parseInt(itr.nextToken().trim());
+			int col_id = Integer.parseInt(itr.nextToken().trim());
+			int m_value = Integer.parseInt(itr.nextToken().trim());
+			
+			word.set(row_id + "," + col_id);
+			i_value.set(m_value);
+			context.write(word, i_value);
 		}
 	}
 
-	public static class WordCountReducer extends Reducer<Text,IntWritable,Text,IntWritable> {
+	public static class MatrixAddReducer extends Reducer<Text,IntWritable,Text,IntWritable> {
 		private IntWritable result = new IntWritable();
 
 		public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
@@ -57,4 +60,3 @@ public class WordCount {
 		System.exit(job.waitForCompletion(true) ? 0 : 1);
 	}
 }
-
