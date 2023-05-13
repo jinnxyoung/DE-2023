@@ -10,26 +10,25 @@ import org.apache.hadoop.mapreduce.lib.input.*;
 import org.apache.hadoop.mapreduce.lib.output.*;
 import org.apache.hadoop.util.GenericOptionsParser;
 
-public class MatrixAdd {
-	public static class MatrixAddMapper extends Mapper<Object, Text, Text, IntWritable> {
-		private final static IntWritable i_value = new IntWritable(1);
+public class IMDB {
+	public static class IMDBMapper extends Mapper<Object, Text, Text, IntWritable> {
+		private final static IntWritable one = new IntWritable(1);
 		private Text word = new Text();
 
 		public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
-			StringTokenizer itr = new StringTokenizer(value.toString());
-			int row_id = Integer.parseInt(itr.nextToken().trim());
-			int col_id = Integer.parseInt(itr.nextToken().trim());
-			int m_value = Integer.parseInt(itr.nextToken().trim());
-			
-			word.set(row_id + "," + col_id);
-			i_value.set(m_value);
-			context.write(word, i_value);
+			String s = value.toString();
+			String[] token = s.split("::");
+			int len = token.length;
+			StringTokenizer itr = new StringTokenizer(token[len-1], "|");
+			while (itr.hasMoreTokens()) {
+				word.set(itr.nextToken());
+				context.write(word, one);
+			}
 		}
 	}
 
-	public static class MatrixAddReducer extends Reducer<Text,IntWritable,Text,IntWritable> {
+	public static class IMDBReducer extends Reducer<Text,IntWritable,Text,IntWritable> {
 		private IntWritable result = new IntWritable();
-
 		public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
 			int sum = 0;
 			for (IntWritable val : values) {
@@ -44,14 +43,14 @@ public class MatrixAdd {
 		Configuration conf = new Configuration();
 		String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
 		if (otherArgs.length != 2) {
-			System.err.println("Usage: wordcount <in> <out>");
+			System.err.println("Usage: imdb <in> <out>");
 			System.exit(2);
 		}
-		Job job = new Job(conf, "word count");
-		job.setJarByClass(WordCount.class);
-		job.setMapperClass(WordCountMapper.class);
-		job.setCombinerClass(WordCountReducer.class);
-		job.setReducerClass(WordCountReducer.class);
+		Job job = new Job(conf, "imdb");
+		job.setJarByClass(IMDB.class);
+		job.setMapperClass(IMDBMapper.class);
+		job.setCombinerClass(IMDBReducer.class);
+		job.setReducerClass(IMDBReducer.class);
 		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(IntWritable.class);
 		FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
