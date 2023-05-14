@@ -10,14 +10,13 @@ import org.apache.hadoop.mapreduce.lib.input.*;
 import org.apache.hadoop.mapreduce.lib.output.*;
 import org.apache.hadoop.util.GenericOptionsParser;
 
-public class IMDB {
-	public static class IMDBMapper extends Mapper<Object, Text, Text, IntWritable> {
-		private final static IntWritable one = new IntWritable(1);
+public class IMDBStudent20191708 {
+	public static class IMDBMapper extends Mapper<Object, Text, Text, LongWritable> {
+		private final static LongWritable one = new LongWritable(1);
 		private Text word = new Text();
 
 		public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
-			String s = value.toString();
-			String[] token = s.split("::");
+			String[] token = value.toString().split("::");
 			int len = token.length;
 			StringTokenizer itr = new StringTokenizer(token[len-1], "|");
 			while (itr.hasMoreTokens()) {
@@ -27,9 +26,9 @@ public class IMDB {
 		}
 	}
 
-	public static class IMDBReducer extends Reducer<Text,IntWritable,Text,IntWritable> {
-		private IntWritable result = new IntWritable();
-		public void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
+	public static class IMDBReducer extends Reducer<Text,LongWritable,Text,LongWritable> {
+		private LongWritable result = new LongWritable();
+		public void reduce(Text key, Iterable<LongWritable> values, Context context) throws IOException, InterruptedException {
 			int sum = 0;
 			for (IntWritable val : values) {
 				sum += val.get();
@@ -43,16 +42,16 @@ public class IMDB {
 		Configuration conf = new Configuration();
 		String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
 		if (otherArgs.length != 2) {
-			System.err.println("Usage: imdb <in> <out>");
+			System.err.println("Usage: IMDB <in> <out>");
 			System.exit(2);
 		}
-		Job job = new Job(conf, "imdb");
-		job.setJarByClass(IMDB.class);
+		Job job = new Job(conf, "IMDB");
+		job.setJarByClass(IMDBStudent20191708.class);
 		job.setMapperClass(IMDBMapper.class);
 		job.setCombinerClass(IMDBReducer.class);
 		job.setReducerClass(IMDBReducer.class);
 		job.setOutputKeyClass(Text.class);
-		job.setOutputValueClass(IntWritable.class);
+		job.setOutputValueClass(LongWritable.class);
 		FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
 		FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));
 		FileSystem.get(job.getConfiguration()).delete( new Path(otherArgs[1]), true);
