@@ -26,8 +26,13 @@ public class UBERStudent20191708 {
 			String tmpDate = itr.nextToken();
 
 			itr = new StringTokenizer(tmpDate, "/");
+			int year = Integer.parseInt(itr.nextToken());
+			int montrh = Integer.parseInt(itr.nextToken());
+			int day = Integer.parseInt(itr.nextToken());
+			
 			LocalDate date = LocalDate.of(year, month, day);
 			DayOfWeek dayOfWeek = date.getDayOfWeek();
+			
 			int dayOfWeekNum = dayOfWeek.getValue();
 			String str = days[dayOfWeekNum - 1];
 
