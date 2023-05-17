@@ -13,6 +13,7 @@ import org.apache.hadoop.mapreduce.lib.output.*;
 import org.apache.hadoop.util.GenericOptionsParser;
 
 public class UBERStudent20191708 {
+
 	public static class UBERMapper extends Mapper<Object, Text, Text, Text> {
 		private Text regionDay = new Text();
 		private Text tripVehicle = new Text();
@@ -25,9 +26,9 @@ public class UBERStudent20191708 {
         		String trips = itr.nextToken();
 
 			itr = new StringTokenizer(tmpDate, "/");
-			int year = Integer.parseInt(itr.nextToken());
 			int month = Integer.parseInt(itr.nextToken());
 			int day = Integer.parseInt(itr.nextToken());
+			int year = Integer.parseInt(itr.nextToken());
 
 			String[] days = {"MON", "TUE", "WED", "THR", "FRI", "SAT", "SUN"};
 			LocalDate date = LocalDate.of(year, month, day);
@@ -43,11 +44,12 @@ public class UBERStudent20191708 {
 
 	public static class UBERReducer extends Reducer<Text, Text, Text, Text> {
 		private Text result = new Text();
+
 		public void reduce(Text key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
 			long trips = 0;
 			long vehicles = 0;
-			for (Text val : values) {
-				String tripVehicle = val.toString();
+			for (Text text : values) {
+				String tripVehicle = text.toString();
 				StringTokenizer itr = new StringTokenizer(tripVehicle, ",");
 				trips += Long.parseLong(itr.nextToken());
 				vehicles += Long.parseLong(itr.nextToken());
