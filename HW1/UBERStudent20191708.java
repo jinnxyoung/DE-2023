@@ -20,23 +20,23 @@ public class UBERStudent20191708 {
 
 		public void map(Object key, Text value, Context context) throws IOException, InterruptedException {
 			StringTokenizer itr = new StringTokenizer(value.toString(), ",");
-			String baseNumber = itr.nextToken();
+			String baseNum = itr.nextToken();
 			String tmpDate = itr.nextToken();
 			String vehicles = itr.nextToken();
         		String trips = itr.nextToken();
 
 			itr = new StringTokenizer(tmpDate, "/");
+			int year = Integer.parseInt(itr.nextToken());
 			int month = Integer.parseInt(itr.nextToken());
 			int day = Integer.parseInt(itr.nextToken());
-			int year = Integer.parseInt(itr.nextToken());
 
 			String[] days = {"MON", "TUE", "WED", "THR", "FRI", "SAT", "SUN"};
 			LocalDate date = LocalDate.of(year, month, day);
 			DayOfWeek dayOfWeek = date.getDayOfWeek();
-			int dayOfWeekNumber = dayOfWeek.getValue();
-		        String str = days[dayOfWeekNumber - 1];
+			int dayOfWeekNum = dayOfWeek.getValue();
+		        String str = days[dayOfWeekNum - 1];
 
-			regionDay.set(baseNumber + "," + str);
+			regionDay.set(baseNum + "," + str);
 			tripVehicle.set(trips + "," + vehicles);
 			context.write(regionDay, tripVehicle);
 		}
