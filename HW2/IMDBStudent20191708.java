@@ -26,8 +26,7 @@ public class IMDBStudent20191708 {
 
 		public double getAvgRating() {
 			return this.average;
-		}
-		
+		}		
 	}
 
 	public static class DoubleString implements WritableComparable {
@@ -113,7 +112,7 @@ public class IMDBStudent20191708 {
 					boolean isFantasy = false;
 					StringTokenizer itr = new StringTokenizer(genres, "|");
 					
-					while(itr.hasMoreTokens()){
+					while (itr.hasMoreTokens()){
 						if((itr.nextToken()).equals("Fantasy")){
 							isFantasy = true;
 							break;
