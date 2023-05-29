@@ -147,7 +147,7 @@ public class IMDBStudent20191708 {
 				if (isFantasy) {
 					outputKey = new DoubleString(id, "M");
 					outputValue.set("M," + title);
-					context.write( outputKey, outputValue );
+					context.write(outputKey, outputValue);
 				}
 			} else {
 				Stirng id = token[1];
