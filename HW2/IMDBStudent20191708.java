@@ -16,7 +16,7 @@ public class IMDBStudent20191708 {
 		public String title;
 		public double average;
 		
-		public Movie(String title, double average) {
+		public MovieInfo (String title, double average) {
 			this.title = title;
 			this.average = average;
 		}
