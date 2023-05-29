@@ -1,6 +1,5 @@
 import java.io.*;
 import java.util.*;
-
 import org.apache.hadoop.conf.*;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -187,16 +186,16 @@ public class IMDBStudent20191708 {
 	
 	public static class MovieComparator implements Comparator<MovieInfo> {
 		@Override
-		public int compare(Movie o1, Movie o2) {
-			if(o1.avgRating > o2.avgRating) return 1;
-			if(o1.avgRating < o2.avgRating) return -1; 	
+		public int compare(MovieInfo o1, MovieInfo o2) {
+			if(o1.average > o2.average) return 1;
+			if(o1.average < o2.average) return -1; 	
 			else return 0;
 		}
 	}
 	
 	public static void insertQueue(PriorityQueue q, String title, double avgRating, int topK) {
 		MovieInfo head = (MovieInfo)q.peek();
-		if(q.size() < topK || head.avgRating < avgRating) {
+		if(q.size() < topK || head.average < avgRating) {
 			MovieInfo movie = new MovieInfo(title, avgRating);
 			q.add(movie);
 			if(q.size() > topK) q.remove();
