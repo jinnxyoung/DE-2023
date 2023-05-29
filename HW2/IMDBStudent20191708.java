@@ -209,8 +209,7 @@ public class IMDBStudent20191708 {
 		job.setMapperClass(IMDBMapper.class);
 		job.setReducerClass(IMDBReducer.class);
 		job.setNumReduceTasks(1);	
-		j
-		ob.setOutputKeyClass(Text.class);
+		job.setOutputKeyClass(Text.class);
 		job.setOutputValueClass(DoubleWritable.class);
 		job.setMapOutputKeyClass(DoubleString.class);
 		job.setMapOutputValueClass(Text.class);
