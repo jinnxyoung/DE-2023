@@ -14,7 +14,7 @@ class MovieInfo {
 	public String title;
 	public double average;
 
-	public Info(String title, double average) {
+	public MovieInfo(String title, double average) {
 		this.title = title;
 		this.average = average;
 	}
