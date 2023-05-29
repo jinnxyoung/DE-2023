@@ -13,7 +13,6 @@ import org.apache.hadoop.mapreduce.lib.output.*;
 import org.apache.hadoop.util.GenericOptionsParser;
 
 public class UBERStudent20191708 {
-
 	public static class UBERMapper extends Mapper<Object, Text, Text, Text> {
 		private Text regionDay = new Text();
 		private Text tripVehicle = new Text();
