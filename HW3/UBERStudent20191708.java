@@ -29,7 +29,7 @@ public final class UBERStudent20191708 {
                 } catch (Exception e) {
                         e.printStackTrace();
                 }
-                return 0;
+                return "0";
         }
 
 	public static void main(String[] args) throws Exception {
