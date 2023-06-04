@@ -7,13 +7,14 @@ import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.StringTokenizer;
 
 // spark version
 public class IMDBStudent20191708 {
 
         public static void main(String [] args) throws Exception {
-        	if (args.length < 1) {
-                	System.out.println("Usage : IMDBStudent20191708 <file>");
+        	if (args.length < 2) {
+                	System.err.println("Usage : IMDBStudent20191708 <in-file> <out-file>");
                 	System.exit(1);
         	}
 
@@ -23,17 +24,11 @@ public class IMDBStudent20191708 {
                 	.getOrCreate();
 
         	JavaRDD<String> lines = spark.read().textFile(args[0]).javaRDD();
+
         	FlatMapFunction<String, String> fmf = new FlatMapFunction<String, String>() {
                 	public Iterator<String> call(String s) {
-                        	ArrayList<String> result = new ArrayList<String>();
-                        	String [] splited = s.split("::");
-                        	StringTokenizer itr = new StringTokenizer(splited[2], "|");
-
-                        	while (itr.hasMoreTokens()) {
-                                	String genre = itr.nextToken();
-                                	result.add(genre);
-                        	}
-                    		return result.iterator();
+                        	String [] arr = s.split("::");
+                        	return Arrays.asList(arr[2].split("\\|")).iterator();
                 	}
         	};
         	JavaRDD<String> words = lines.flatMap(fmf);
@@ -53,8 +48,7 @@ public class IMDBStudent20191708 {
 
         	JavaPairRDD<String, Integer> counts = ones.reduceByKey(f2);
     
-        	JavaRDD<String> resultRdd = counts.map(x -> x._1 + " " + x._2);
-        	resultRdd.saveAsTextFile(args[1]);
+        	counts.saveAsTextFile(args[1]);
         	spark.stop();
         }
 }       
