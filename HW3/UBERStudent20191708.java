@@ -14,7 +14,7 @@ import java.text.*;
 public final class UBERStudent20191708 {
 	
 	public static String returnDay(String date) {
-                SimpleDateFormat format = new SimpleDateFormat("mm/dd/yyyy");
+                SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
                 String[] days = {"SUN", "MON", "TUE", "WED", "THR", "FRI", "SAT"};
                 Calendar cal = Calendar.getInstance();
                 Date getDate;
